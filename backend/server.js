@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 
  const UserRoutes = require('./routes/userRoutes');
  const ItemRoutes = require('./routes/ItemRoutes');
-
+ const RecipeRoutes = require('./routes/recipeRoutes')
 
 //Connect DB
 dotenv.config();
@@ -23,8 +23,8 @@ app.use(express.json());
 
 app.use('/api/users', UserRoutes);
 app.use('/api/items', ItemRoutes);
+app.use('/api/recipes', RecipeRoutes);
 
-//clg
 
 
 const PORT = process.env.PORT || 8000;

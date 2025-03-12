@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { registerUser, loginUser, updateUser } = require('../controllers/userController');
 const router = express.Router();
