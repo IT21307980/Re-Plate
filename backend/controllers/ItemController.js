@@ -4,11 +4,11 @@ const Comments = require('../models/commentsModel')
 
 const addItem = async(req, res) =>{
 
-    const {itemName, ownerId, quantity, expireDate, location, mediaFile, contact, itemType, price } = req.body;
+    const {itemName, ownerId, quantity, expireDate, location, mediaFile, contact, itemType, price, description } = req.body;
 
     try {
 
-        const item = await Items.create({itemName, ownerId, quantity, expireDate, location, mediaFile, contact, itemType, price });
+        const item = await Items.create({itemName, ownerId, quantity, expireDate, location, mediaFile, contact, itemType, price, description });
         //console.log("item data is here");
 
         if (item) {
@@ -67,15 +67,26 @@ const addComment = async(req,res) => {
     }
 }
 
-const getComments = async(req,res) => {
-    try{
-        await Comments.find().then(data => {
-            res.send({ status: "Ok", data: data })
-        })
-    }catch (error){
-        console.log("Error", error);
+const getComments = async (req, res) => {
+    const { itemId } = req.query; // Access itemId from query parameters
+    
+    //console.log("Item Id:", itemId);
+
+    try {
+        const comments = await Comments.find({ itemId: itemId });
+
+        if (comments.length > 0) {
+            res.send({ status: "Ok", data: comments });
+        } else {
+            res.send({ status: "No Comments", data: [] });
+        }
+    } catch (error) {
+        console.log("Error:", error);
+        res.status(500).send({ status: "Error", message: error.message });
     }
 }
+
+
 
 const getUsersPosts = async (req, res) => {
     const {id} = req.body;

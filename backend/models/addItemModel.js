@@ -39,6 +39,9 @@ const itemSchema = new mongoose.Schema(
             type: String,
             
         },
+        description:{
+            type: String,
+        }
     }
 )
 

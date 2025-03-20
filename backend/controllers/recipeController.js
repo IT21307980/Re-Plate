@@ -1,5 +1,11 @@
 const Recipes = require ('../models/recipeModel')
 
+//Normalize ingredients to lowercase
+function normalizeIngredients(ingredients) {
+  return ingredients
+    .filter((ingredient) => ingredient !== null && ingredient !== undefined) // Filter out null or undefined values
+    .map((ingredient) => ingredient.toString().toLowerCase()); // Convert to string and normalize to lowercase
+}
 
 
 const addRecipe = async(req,res) =>{
@@ -7,7 +13,15 @@ const addRecipe = async(req,res) =>{
     const {recipeId, ownerId, owner, title, ingredients, instructions, image} = req.body;
 
         try {
-            const result = await Recipes.create({recipeId, ownerId, owner, title, ingredients, instructions, image});
+            const result = await Recipes.create({
+              recipeId,
+              ownerId, 
+              owner, 
+              title, 
+              ingredients : normalizeIngredients(ingredients), 
+              instructions, 
+              image
+            });
             res.send({status: 'Ok', data:result})
         } catch (error) {
             console.log("Recipe adding failed!")
@@ -40,18 +54,21 @@ function calculateSimilarity(recipeIngredients, userIngredients) {
 
 const checkRecipes = async (req, res) => {
     const { ingredients } = req.body;
+    //console.log("received ",ingredients)
   
     if (!ingredients || ingredients.length === 0) {
       return res.status(400).json({ error: "Please provide a list of ingredients." });
     }
   
     try {
+      const userIngredients = normalizeIngredients(ingredients);
+      console.log(ingredients)
       const recipes = await Recipes.find(); // Fetch all recipes from the database
   
       // Calculate similarity for each recipe
       const results = recipes.map((recipe) => ({
         ...recipe._doc,
-        similarity: calculateSimilarity(recipe.ingredients, ingredients),
+        similarity: calculateSimilarity(normalizeIngredients(recipe.ingredients), userIngredients),
       }));
   
       // Sort by similarity (descending)
