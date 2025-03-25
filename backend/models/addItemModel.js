@@ -16,7 +16,7 @@ const itemSchema = new mongoose.Schema(
            required: true
         },
         expireDate:{
-            type: String,
+            type: Date,
            required: true
         },
         mediaFile:{

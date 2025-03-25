@@ -14,12 +14,13 @@ const generateToken = (id) => {
 // Register User
 const registerUser = async (req, res) => {
     const { name, contact, location, email, password } = req.body;
-    console.log("Data arrived")
+   // console.log("Data arrived")
 
     try {
        const userExists = await User.findOne({ email });
 
         if (userExists) {
+            console.log("User already exists");
             return res.status(400).json({ message: 'User already exists' });
         }
         

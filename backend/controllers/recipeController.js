@@ -54,7 +54,6 @@ function calculateSimilarity(recipeIngredients, userIngredients) {
 
 const checkRecipes = async (req, res) => {
     const { ingredients } = req.body;
-    //console.log("received ",ingredients)
   
     if (!ingredients || ingredients.length === 0) {
       return res.status(400).json({ error: "Please provide a list of ingredients." });
@@ -62,8 +61,7 @@ const checkRecipes = async (req, res) => {
   
     try {
       const userIngredients = normalizeIngredients(ingredients);
-      console.log(ingredients)
-      const recipes = await Recipes.find(); // Fetch all recipes from the database
+      const recipes = await Recipes.find(); 
   
       // Calculate similarity for each recipe
       const results = recipes.map((recipe) => ({
