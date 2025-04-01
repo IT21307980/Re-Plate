@@ -7,7 +7,6 @@ const addItem = async(req, res) =>{
     const {itemName, ownerId, quantity, expireDate, location, mediaFile, contact, itemType, price, description } = req.body;
 
     try {
-
         const item = await Items.create({itemName, ownerId, quantity, expireDate, location, mediaFile, contact, itemType, price, description });
         //console.log("item data is here");
 
@@ -23,8 +22,26 @@ const addItem = async(req, res) =>{
     }
 }
 
-const getItems = async(req, res) => {
+const editItem = async(req, res) => {
 
+    try {
+        const updatedItem = await Items.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        //console.log("item data is here");
+
+        if (updatedItem) {
+            res.status(201).json({
+                message: 'Item edited successfully!!',
+            });
+        } else {
+            res.status(400).json({ message: 'Item not found!' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+
+}
+
+const getItems = async(req, res) => {
     try{
         await Items.find().then(data => {
             res.send({ status: "Ok", data: data })
@@ -34,9 +51,9 @@ const getItems = async(req, res) => {
     }
 }
 
-const item = async(req,res) => {
+const item = async(req,res) => {    //Get single item
     try {
-        const data = await Items.findById(req.params.id).then(data => {
+        await Items.findById(req.params.id).then(data => {
             if(data){
                 res.send({status: 'ok', data: data})
             }else{
@@ -92,18 +109,18 @@ const getUsersPosts = async (req, res) => {
     const {id} = req.body;
 
     try {
-        const results = await Items.find({ownerId: id}); // Fetch all documents in the collection
+        const results = await Items.find({ownerId: id}); 
         //console.log(results)
 
         if (results.length > 0) {
-            res.send({ status: 'ok', data: results }); // Return the data if found
+            res.send({ status: 'ok', data: results }); 
             //console.log("data sent", id); 
 
         } else {
-            res.status(404).json({ message: "No posts found" }); // Handle case where no data exists
+            res.status(404).json({ message: "No posts found" }); 
         }
     } catch (error) {
-        res.status(400).json({ message: error.message }); // Return an error message in case of an exception
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -125,4 +142,4 @@ const deletePost = async (req, res) => {
 
 
 
-module.exports = {addItem, getItems, item, addComment, getComments, getUsersPosts, deletePost};
+module.exports = {addItem, editItem, getItems, item, addComment, getComments, getUsersPosts, deletePost};

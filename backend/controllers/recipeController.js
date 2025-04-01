@@ -2,14 +2,15 @@ const Recipes = require('../models/recipeModel');
 const cosineSimilarity = require('cosine-similarity');
 
 // Normalize ingredients to lowercase
-function normalizeIngredients(ingredients) {
-  if (!Array.isArray(ingredients)) return [];
+const normalizeIngredients = (ingredients) => {
+  if (!Array.isArray(ingredients)) {
+      throw new Error("Ingredients must be an array");
+  }
   return ingredients
-    .flatMap((ingredient) => 
-      ingredient.split(",").map((ing) => ing.trim().toLowerCase()) // Split by commas and normalize
-    )
-    .filter((ingredient) => ingredient); // Remove empty strings
-}
+      .filter((ingredient) => ingredient) // Filter out null/undefined
+      .flatMap((ingredient) => ingredient.split(',').map((i) => i.trim().toLowerCase()));
+};
+
 
 
 // Function to calculate cosine similarity
