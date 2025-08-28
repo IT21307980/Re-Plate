@@ -1,5 +1,5 @@
 # Re-Plate - Food Wastage Management System
-Final Project at University  of Hertfordshire 
+Final Project at University  of Hertfordshire
 A MERN stack web application designed to help university students reduce food waste by sharing and donating meals within their community.
 ✨ Features:
     Secure user authentication with JWT
